@@ -1,9 +1,9 @@
-This assignment reinforced my understanding of how Streamlit works. The script reruns each time you make changes, 
-so you have to save the work in a widget. In the one-package app, I check the text_input value before parsing; if 
-it is empty, the app doesn’t crash. The file-based app introduced the difference between bytes and text. Uploaded 
-files are in bytes, so I had to decode them with UTF-8 before splitting them into lines, stripping blanks, and 
-parsing each package description, which lets me handle a file with a blank line in the middle without producing 
-an error. The third app was the hardest because the uploader keeps its file with each rerun. The same file would 
-be processed over and over unless I used a button and stored the counters in st.session_state so they initialize 
-once and persist across reruns. My next step is to keep practicing this pattern so I can confidently build apps 
-that respond to user input without breaking on empty state or duplicate processing.
+i learned how Streamlit works: the script reruns each time you make changes, so you have to save the work in a 
+widget. In the one-package app, I check the text_input value before parsing; if it is empty, the app doesn’t 
+crash. The file-based app introduced the difference between bytes and text. Uploaded files are in bytes, so I had 
+to decode them with UTF-8 before splitting them into lines, stripping blanks, and parsing each package description,
+which lets me handle a file with a blank line in the middle without producing an error. The third app was the 
+hardest because the uploader keeps its file with each rerun. The same file would be processed over and over unless 
+I used a button and stored the counters in st.session_state so they initialize once and persist across reruns. 
+For future practices, I intend to keep practicing this pattern so I can confidently build apps that respond to user
+input without breaking on empty state or duplicate processing.
