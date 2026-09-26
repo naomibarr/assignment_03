@@ -1,6 +1,5 @@
-Write your reflection here.
+This assignment taught me how a Streamlit script reruns from top to bottom every time the page changes, so the work has to be guarded behind a widget's return value instead of running unconditionally. In the one-package app, the text_input is the value I check before parsing; if it is empty, the app stays quiet and does not crash. I also learned that each output should be shown with a Streamlit widget such as st.info or st.success, not by printing to the terminal.
 
-See reflection.md for what makes a good reflection — be specific, use the
-terminology from this assignment (rerun, widget, return value, guard, bytes vs.
-text, decode, session state, initialise once, button-triggered, metric), and make
-it actionable.
+The file-based app introduced the difference between bytes and text. An uploaded file arrives as bytes, so I had to decode it with UTF-8 before splitting it into lines, stripping blanks, and parsing each package description. That was the key to handling a file with a blank line in the middle and a trailing newline without producing an error. The third app was the hardest part because the uploader keeps its file across reruns: the same file would be processed repeatedly unless I used a button-triggered workflow and stored the counters in st.session_state so they initialize once and then persist across reruns.
+
+The metric cards helped me display the running totals in a clean way, and the summary list kept each processed file visible as the app accumulated results. This assignment made the Streamlit execution model much clearer: widgets return values, the script reruns on each interaction, and state must be managed intentionally to survive those reruns. My next step is to keep practicing this pattern so I can confidently build apps that respond to user input without breaking on empty state or duplicate processing.
