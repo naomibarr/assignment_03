@@ -14,7 +14,12 @@ Run it:  Run and Debug -> "Streamlit Run: Current File"   (see README Reference 
 Test it: pytest tests/test_streamlit.py -k one_package
 """
 
+import sys
+from pathlib import Path
+
 import streamlit as st
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from packaging_parser import calc_total_units, get_unit, parse_packaging
 

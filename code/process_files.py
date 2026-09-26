@@ -21,8 +21,12 @@ Test it: pytest tests/test_streamlit.py -k process_files
 """
 
 import json
+import sys
+from pathlib import Path
 
 import streamlit as st
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from packaging_parser import parse_packaging
 
@@ -38,31 +42,30 @@ st.title("Process Package Files")
 package_file = st.file_uploader("Upload a package file", key="package_file")
 clicked = st.button("Process file", key="process")  # True only when just clicked
 
+if clicked and package_file is not None:
+    text = package_file.getvalue().decode("utf-8")
+    packages = []
+
+    for line in text.splitlines():
+        package_text = line.strip()
+        if not package_text:
+            continue
+        packages.append(parse_packaging(package_text))
+
+    output_name = package_file.name.replace(".txt", ".json")
+    with open(f"data/{output_name}", "w", encoding="utf-8") as json_file:
+        json.dump(packages, json_file)
+
+    summary = f"{len(packages)} packages written to data/{output_name}"
+    st.session_state.files_processed += 1
+    st.session_state.packages_processed += len(packages)
+    st.session_state.file_summaries.append(summary)
+
 left_column, right_column = st.columns(2)
 with left_column:
     st.metric("Files processed", st.session_state.files_processed)
 with right_column:
     st.metric("Packages processed", st.session_state.packages_processed)
-
-if st.button("Process file", key="process"):
-    if package_file is not None:
-        text = package_file.getvalue().decode("utf-8")
-        packages = []
-
-        for line in text.splitlines():
-            package_text = line.strip()
-            if not package_text:
-                continue
-            packages.append(parse_packaging(package_text))
-
-        output_name = package_file.name.replace(".txt", ".json")
-        with open(f"data/{output_name}", "w", encoding="utf-8") as json_file:
-            json.dump(packages, json_file)
-
-        summary = f"{len(packages)} packages written to data/{output_name}"
-        st.session_state.files_processed += 1
-        st.session_state.packages_processed += len(packages)
-        st.session_state.file_summaries.append(summary)
 
 for summary in st.session_state.file_summaries:
     st.info(summary)
