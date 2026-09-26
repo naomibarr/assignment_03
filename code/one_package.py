@@ -20,11 +20,8 @@ from packaging_parser import calc_total_units, get_unit, parse_packaging
 
 st.title("Process One Package")
 
-package_data = st.text_input(
-    "Enter package data:",
-    key="package_data",
-    placeholder="12 eggs in 1 carton / 3 cartons in 1 box",
-)
+package_data = st.text_input("Enter package data:", key="package_data")  # str, "" until typed
+# str, "" until typed
 
 if package_data:
     package = parse_packaging(package_data)

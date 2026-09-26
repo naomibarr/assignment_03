@@ -36,6 +36,7 @@ if "file_summaries" not in st.session_state:
 st.title("Process Package Files")
 
 package_file = st.file_uploader("Upload a package file", key="package_file")
+clicked = st.button("Process file", key="process")  # True only when just clicked
 
 left_column, right_column = st.columns(2)
 with left_column:

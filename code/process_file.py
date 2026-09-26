@@ -22,25 +22,29 @@ from packaging_parser import calc_total_units, get_unit, parse_packaging
 
 st.title("Process File of Packages")
 
-package_file = st.file_uploader("Upload a package file", key="package_file")
+uploaded_file = st.file_uploader("Upload package file:", key="package_file")  # None until chosen
+# None until chosen
 
-if package_file is not None:
-    text = package_file.getvalue().decode("utf-8")
-    lines = text.splitlines()
+if uploaded_file is not None:
+    text = uploaded_file.getvalue().decode("utf-8")    # bytes -> str
     packages = []
 
-    for line in lines:
-        package_text = line.strip()
-        if not package_text:
+    # Every line: strip it, skip it if it's blank, parse it, keep the parsed package
+    # in a list, and show the line with its total:
+    # 12 eggs in 1 carton / 3 cartons in 1 box ➡️ Total 📦 Size: 36 eggs
+    for line in text.splitlines():                      # one str per line
+        line = line.strip()
+        if not line:                                    # the empty line after the final newline
             continue
 
-        package = parse_packaging(package_text)
+        package = parse_packaging(line)
+        packages.append(package)
+
         total = calc_total_units(package)
         unit = get_unit(package)
-        packages.append(package)
-        st.info(f"{package_text} ➡️ Total 📦 Size: {total} {unit}")
+        st.info(f"{line} ➡️ Total 📦 Size: {total} {unit}")
 
-    output_name = package_file.name.replace(".txt", ".json")
+    output_name = uploaded_file.name.replace(".txt", ".json")
     with open(f"data/{output_name}", "w", encoding="utf-8") as json_file:
         json.dump(packages, json_file)
 
